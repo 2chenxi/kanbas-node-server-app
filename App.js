@@ -8,6 +8,9 @@ import cors from "cors";
 const app = express();
 app.use(cors()); 
 app.use(express.json()); // do all your work after this line
+app.get('/', (req, res) => {
+    res.send('Welcome to Full Stack Development!');
+});
 CourseRoutes(app);     
 ModuleRoutes(app); 
 AssignmentRoutes(app);         
