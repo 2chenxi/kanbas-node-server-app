@@ -1,29 +1,46 @@
-import Database from "../Database/index.js";
-export default function CourseRoutes(app) {
-    app.put("/api/courses/:id", (req, res) => {
-        const { id } = req.params;
-        const course = req.body;
-        Database.courses = Database.courses.map((c) =>
-          c._id === id ? { ...c, ...course } : c
-        );
-        res.sendStatus(204);
-      });    
+import * as dao from "./dao.js";
 
-    app.delete("/api/courses/:id", (req, res) => {
-        const { id } = req.params;
-        Database.courses = Database.courses.filter((c) => c._id !== id);
-        res.sendStatus(204);
-      });
-    
-    app.post("/api/courses", (req, res) => {
-        const course = { ...req.body,
-          _id: new Date().getTime().toString() };
-        Database.courses.push(course);
-        res.send(course);
-      });
-    
-  app.get("/api/courses", (req, res) => {
-    const courses = Database.courses;
-    res.send(courses);
-  });
+export default function CourseRoutes(app) {
+  const createCourse = async (req, res) => {
+    try {
+      const course = await dao.createCourse(req.body);
+      res.json(course);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  };
+
+  const fetchAllCourses = async (req, res) => {
+    try {
+      const courses = await dao.fetchAllCourses();
+      res.json(courses);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  };
+
+  const updateCourse = async (req, res) => {
+    const { courseId } = req.params;
+    try {
+      const status = await dao.updateCourse(courseId, req.body);
+      res.json(status);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  };
+
+  const deleteCourse = async (req, res) => {
+    const { courseId } = req.params;
+    try {
+      const status = await dao.deleteCourse(courseId);
+      res.json(status);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  };
+
+  app.delete("/api/courses/:courseId", deleteCourse);
+  app.post("/api/courses", createCourse);
+  app.put("/api/courses/:courseId", updateCourse);
+  app.get("/api/courses", fetchAllCourses);
 }
