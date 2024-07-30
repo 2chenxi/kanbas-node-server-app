@@ -10,7 +10,7 @@ const lessonSchema = new mongoose.Schema({
 const moduleSchema = new mongoose.Schema({
   name: { type: String, required: true },
   description: { type: String, required: true },
-  course: { type: String, required: true },
+  course: { type: mongoose.Schema.Types.ObjectId, required: true },
   lessons: [lessonSchema]
 }, 
 { collection: "modules" });

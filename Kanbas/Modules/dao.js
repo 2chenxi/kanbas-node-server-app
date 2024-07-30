@@ -1,11 +1,11 @@
 import Module from "./model.js";
 
-export const createModule = (courseNumber, module) => {
-  module.course = courseNumber;
+export const createModule = (courseId , module) => {
+  module.course = courseId;
   return Module.create(module);
 };
 
-export const findModulesForCourse = (courseNumber) => Module.find({ course: courseNumber });
+export const findModulesForCourse = (courseId ) => Module.find({ course: courseId });
 
 
 export const updateModule = (moduleId, module) => {
