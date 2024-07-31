@@ -1,4 +1,5 @@
 import express from "express";
+import MongoStore from "connect-mongo";
 import "dotenv/config";
 import session from "express-session";
 import Lab5 from "./Lab5/index.js";
@@ -23,6 +24,7 @@ app.use(
     secret: process.env.SESSION_SECRET || "kanbas",
     resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({ CONNECTION_STRING }),
   };
   if (process.env.NODE_ENV !== "development") {
     sessionOptions.proxy = true;
